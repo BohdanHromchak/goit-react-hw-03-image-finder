@@ -5,6 +5,8 @@ import { fetchImages } from 'services/image-api';
 import {Searchbar} from './Searchbar/Searchbar'
 import {ImageGallery} from './ImageGallery/ImageGallery'
 import { Loader } from './Loader/Loader';
+import {Button} from './Button/Button'
+import css from './App.module.css'
 
 export class App extends Component {
   state = {
@@ -52,39 +54,23 @@ this.setState((prevState) => ({
 
 }
   render() {
-    console.log(this.state.status)
 
     const {images, status} = this.state
     return(
-      <>
+      <div className={css.App}>
       <Searchbar onFormSubmit={this.handleFormSubmit}/>
 
 {(status === "resolved") && (<>
 <ImageGallery images={images}/> 
-<button onClick={this.handleLoadMore}>Load more</button>
+
+<Button onClick={this.handleLoadMore}/>
 </>)}
 {(status === "pending") && <Loader/>}
 {(status === "rejected") && (toast.error('Sorry, there are no images matching your search query. Please try again.'))}
 <ToastContainer autoClose={2500} />
-      </>
+      </div>
     )
   }
 }
 
 
-// componentDidUpdate(_, prevState) {
-  
-//   const prevImageName = prevState.imageName
-//   const nextImageName = this.state.imageName
-//   const prevPage = prevState.page
-//   const nextPage = this.state.page
-  
-//   if(prevImageName !== nextImageName || prevPage !== nextPage) {
-//     this.setState({isLoading: true, status: null})
-//     fetchImages(this.state.imageName, this.state.page).then(images => {
-//      if(images.totalHits === 0) {
-//        this.setState({status: "rejected"})
-//      }else{this.setState({images: [...this.state.images, ...images.hits], status: "resolved"})}
-//     }).catch(() => {this.setState({status: "rejected"})}).finally(() => this.setState({isLoading: false}))
-//   }
-//   }

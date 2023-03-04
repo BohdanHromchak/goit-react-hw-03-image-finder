@@ -1,5 +1,8 @@
+import PropTypes from 'prop-types';
 import { Component } from "react";
 import { toast } from 'react-toastify';
+import css from './Searchbar.module.css'
+import { AiOutlineSearch } from 'react-icons/ai';
 
 export class Searchbar extends Component {
     state = {
@@ -22,14 +25,16 @@ export class Searchbar extends Component {
     }
     render() {
       
-        return (<header className="searchbar">
-        <form className="form" onSubmit={this.handleSubmit}>
-          <button type="submit" className="button">
-            <span className="button-label">Search</span>
+        return (<header className={css.Searchbar}>
+          
+        <form className={css.SearchForm} onSubmit={this.handleSubmit}>
+          <button type="submit" className={css.SearchForm__button}>
+          <AiOutlineSearch size={23}/>
           </button>
       
+      
           <input
-            className="input"
+            className={css.SearchForm__input}
             type="text"
             autoComplete="off"
             autoFocus
@@ -41,4 +46,9 @@ export class Searchbar extends Component {
         </form>
       </header>)
     }
+}
+
+
+Searchbar.propTypes = {
+  onFormSubmit: PropTypes.func.isRequired,
 }
