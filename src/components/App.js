@@ -10,8 +10,7 @@ export class App extends Component {
   state = {
     imageName: null,
     images: [],
-    isLoading: false,
-    status: 'idle',
+    status: "idle",
     page: 1
   }
 
@@ -23,16 +22,17 @@ const prevPage = prevState.page
 const nextPage = this.state.page
 
 if(prevImageName !== nextImageName) {
-  this.setState({isLoading: true, status: null, page: 1})
+  this.setState({ status: "pending", page: 1})
   fetchImages(this.state.imageName, this.state.page).then(images => {
+
    if(images.totalHits === 0) {
-     this.setState({status: "rejected"})
+    return this.setState({status: "rejected"})
    }else{this.setState({images: images.hits, status: "resolved"})}
-  }).catch(() => {this.setState({status: "rejected"})}).finally(() => this.setState({isLoading: false}))
+  }).catch(() => {this.setState({status: "rejected"})}).finally(() => this.setState({tatus: "idle"}))
 }
 if(prevPage !== nextPage) {
   fetchImages(this.state.imageName, this.state.page).then(images => {if(images.hits === 0){
-   return this.setState({status: 'idle'})
+   return this.setState({status: "idle"})
   }else{
     this.setState({images: [...this.state.images, ...images.hits]})
   }})
@@ -42,6 +42,7 @@ if(prevPage !== nextPage) {
 
 handleFormSubmit = (imageName) => {
   this.setState({imageName})
+  this.setState({status: "idle"})
 }
 
 handleLoadMore = () => {
@@ -51,9 +52,9 @@ this.setState((prevState) => ({
 
 }
   render() {
-    console.log(this.state.images)
+    console.log(this.state.status)
 
-    const {images, status, isLoading} = this.state
+    const {images, status} = this.state
     return(
       <>
       <Searchbar onFormSubmit={this.handleFormSubmit}/>
@@ -62,7 +63,7 @@ this.setState((prevState) => ({
 <ImageGallery images={images}/> 
 <button onClick={this.handleLoadMore}>Load more</button>
 </>)}
-{(isLoading) && <Loader/>}
+{(status === "pending") && <Loader/>}
 {(status === "rejected") && (toast.error('Sorry, there are no images matching your search query. Please try again.'))}
 <ToastContainer autoClose={2500} />
       </>
