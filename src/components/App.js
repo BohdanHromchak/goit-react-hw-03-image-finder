@@ -28,9 +28,11 @@ if(prevImageName !== nextImageName) {
   fetchImages(this.state.imageName, this.state.page).then(images => {
 
    if(images.totalHits === 0) {
-    return this.setState({status: "rejected"})
+     this.setState({status: "idle"})
+     toast.error('Sorry, there are no images matching your search query. Please try again.')
+     return
    }else{this.setState({images: images.hits, status: "resolved"})}
-  }).catch(() => {this.setState({status: "rejected"})}).finally(() => this.setState({tatus: "idle"}))
+  }).catch(() => {this.setState({status: "idle"})}).finally(() => this.setState({tatus: "idle"}))
 }
 if(prevPage !== nextPage) {
   fetchImages(this.state.imageName, this.state.page).then(images => {if(images.hits === 0){
@@ -62,11 +64,9 @@ this.setState((prevState) => ({
 
 {(status === "resolved") && (<>
 <ImageGallery images={images}/> 
-
 <Button onClick={this.handleLoadMore}/>
 </>)}
 {(status === "pending") && <Loader/>}
-{(status === "rejected") && (toast.error('Sorry, there are no images matching your search query. Please try again.'))}
 <ToastContainer autoClose={2500} />
       </div>
     )
