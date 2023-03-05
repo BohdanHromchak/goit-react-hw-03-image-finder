@@ -46,7 +46,7 @@ if(prevPage !== nextPage) {
 
 handleFormSubmit = (imageName) => {
   this.setState({imageName})
-  this.setState({status: "idle"})
+  this.setState({status: "idle", page: 1})
 }
 
 handleLoadMore = () => {
@@ -56,7 +56,7 @@ this.setState((prevState) => ({
 
 }
   render() {
-
+console.log(this.state.page)
     const {images, status} = this.state
     return(
       <div className={css.App}>
