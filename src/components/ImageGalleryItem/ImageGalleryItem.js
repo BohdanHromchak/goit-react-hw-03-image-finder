@@ -9,10 +9,12 @@ export class ImageGalleryItem extends Component {
 state = {
 showModal: false
 }
-handleModal = () => {
+openModal = () => {
    this.setState({showModal: true})
 }
-
+closeModal = () => {
+   this.setState({showModal: false})
+}
 handleBackdropClick = (event) => {
    if(event.target === event.currentTarget) {
      this.setState({showModal: false})
@@ -25,9 +27,9 @@ handleBackdropClick = (event) => {
       return(
          <>
              <li id={id} className={css.ImageGalleryItem}>
-    <img src={webformatURL} alt={tags} className={css.ImageGalleryItem__image} onClick={this.handleModal}/>
+    <img src={webformatURL} alt={tags} className={css.ImageGalleryItem__image} onClick={this.openModal}/>
   </li>
-  {this.state.showModal && <Modal onBackdrop={this.handleBackdropClick} modalImage={largeImageURL} alt={tags}/>}
+  {this.state.showModal && <Modal onBackdrop={this.handleBackdropClick} closeModal={this.closeModal} modalImage={largeImageURL} alt={tags}/>}
 </>
       )
    }
