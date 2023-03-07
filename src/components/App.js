@@ -10,7 +10,7 @@ import css from './App.module.css'
 
 export class App extends Component {
   state = {
-    imageName: null,
+    imageName: "",
     images: [],
     status: "idle",
     page: 1
@@ -20,43 +20,36 @@ componentDidUpdate(_, prevState) {
   
 const prevImageName = prevState.imageName
 const nextImageName = this.state.imageName
-const prevPage = prevState.page
-const nextPage = this.state.page
 
 if(prevImageName !== nextImageName) {
-  this.setState({ status: "pending", page: 1})
+  this.setState({ status: "pending"})
   fetchImages(this.state.imageName, this.state.page).then(images => {
-
    if(images.totalHits === 0) {
      this.setState({status: "idle"})
      toast.error('Sorry, there are no images matching your search query. Please try again.')
      return
-   }else{this.setState({images: images.hits, status: "resolved"})}
-  }).catch(() => {this.setState({status: "idle"})}).finally(() => this.setState({tatus: "idle"}))
-}
-if(prevPage !== nextPage) {
-  fetchImages(this.state.imageName, this.state.page).then(images => {if(images.hits === 0){
-   return this.setState({status: "idle"})
-  }else{
-    this.setState({images: [...this.state.images, ...images.hits]})
+   }else{this.setState({images: images.hits, status: "resolved"
+   })
   }})
 }
-
 }
 
 handleFormSubmit = (imageName) => {
-  this.setState({imageName})
-  this.setState({status: "idle", page: 1, images: []})
+  this.setState({imageName, page: 1, images: []})
 }
 
 handleLoadMore = () => {
-this.setState((prevState) => ({
-  page: prevState.page + 1
-}))
+  this.setState((prevState) => ({
+    page: prevState.page + 1
+  }))
 
+fetchImages(this.state.imageName, this.state.page + 1).then(images => {
+  this.setState((prevState) => {return {images: [...prevState.images, ...images.hits]}})
+})
 }
+
   render() {
-console.log(this.state.images)
+
     const {images, status} = this.state
     return(
       <div className={css.App}>
@@ -74,3 +67,33 @@ console.log(this.state.images)
 }
 
 
+
+
+// componentDidUpdate(_, prevState) {
+  
+//   const prevImageName = prevState.imageName
+//   const nextImageName = this.state.imageName
+//   const prevPage = prevState.page
+//   const nextPage = this.state.page
+  
+//   if(prevImageName !== nextImageName) {
+//     this.setState({ status: "pending", page: 1})
+  
+//     fetchImages(this.state.imageName, this.state.page).then(images => {
+//      if(images.totalHits === 0) {
+//        this.setState({status: "idle"})
+//        toast.error('Sorry, there are no images matching your search query. Please try again.')
+//        return
+//      }else{this.setState({images: images.hits, status: "resolved"})}
+//     }).catch(() => {this.setState({status: "idle"})}).finally(() => this.setState({tatus: "idle"}))
+//   }
+  
+//   if(prevPage !== nextPage) {
+//     fetchImages(this.state.imageName, this.state.page).then(images => {if(images.hits === 0){
+//      return this.setState({status: "idle"})
+//     }else{
+//       this.setState({images: [...this.state.images, ...images.hits]})
+//     }})
+//   }
+  
+//   }
